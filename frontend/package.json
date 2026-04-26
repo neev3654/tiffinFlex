@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "autoprefixer": "10.4.19",
+    "axios": "^1.15.2",
     "framer-motion": "^11.0.0",
     "lucide-react": "^0.344.0",
     "postcss": "8.4.38",
