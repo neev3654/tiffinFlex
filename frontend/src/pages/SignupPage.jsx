@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UtensilsCrossed, User, Mail, Lock, ArrowRight, ArrowLeft, Check } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import plans from '../data/plans';
 
 const steps = ['Account', 'Preferences', 'Plan'];
@@ -17,6 +18,7 @@ const SignupPage = () => {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { signup } = useAuth();
 
   const update = (field, value) => setForm({ ...form, [field]: value });
 
@@ -39,8 +41,7 @@ const SignupPage = () => {
   };
 
   const handleSubmit = () => {
-    localStorage.setItem('tf_token', 'dummy-jwt-token');
-    localStorage.setItem('tf_user', JSON.stringify({ name: form.name, email: form.email, plan: form.selectedPlan, diet: form.diet }));
+    signup({ name: form.name, email: form.email, plan: form.selectedPlan, diet: form.diet });
     navigate('/dashboard');
   };
 
