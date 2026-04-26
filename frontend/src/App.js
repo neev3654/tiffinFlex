@@ -1,12 +1,15 @@
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import Features from './components/Features';
+import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-espresso">
       <Navbar />
       <Hero />
-      {/* Rest of the landing page will go here */}
+      <Features />
+      <Footer />
     </div>
   );
 }
