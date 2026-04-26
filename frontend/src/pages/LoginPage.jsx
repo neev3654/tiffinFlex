@@ -13,20 +13,21 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     if (!email || !password) {
       setError('Please fill in all fields.');
       return;
     }
-    const result = login(email, password);
+    const result = await login(email, password);
     if (result.success) {
       navigate('/dashboard');
     } else {
       setError(result.message);
     }
   };
+
 
 
   return (

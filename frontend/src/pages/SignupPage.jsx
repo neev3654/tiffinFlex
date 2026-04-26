@@ -40,10 +40,11 @@ const SignupPage = () => {
     if (step < 2) setStep(step + 1);
   };
 
-  const handleSubmit = () => {
-    signup({ name: form.name, email: form.email, plan: form.selectedPlan, diet: form.diet });
+  const handleSubmit = async () => {
+    await signup({ name: form.name, email: form.email, password: form.password, selectedPlan: form.selectedPlan, diet: form.diet, selectedAllergies: form.selectedAllergies, spiceLevel: form.spiceLevel });
     navigate('/dashboard');
   };
+
 
   const slideVariants = {
     enter: { x: 40, opacity: 0 },
