@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { CalendarDays, ArrowRightLeft, Flame, TrendingUp, ChefHat, Clock } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
+import SwapModal from '../components/SwapModal';
 import weeklyMenu from '../data/weeklyMenu';
 
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -10,7 +11,20 @@ const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const DashboardPage = () => {
   const { user } = useAuth();
   const [selectedDay, setSelectedDay] = useState(0);
-  const todayMenu = weeklyMenu[selectedDay];
+  const [swapModal, setSwapModal] = useState({ open: false, meal: null, type: '' });
+  const [menus, setMenus] = useState(weeklyMenu);
+  const todayMenu = menus[selectedDay];
+
+  const handleSwapClose = (swappedMeal) => {
+    if (swappedMeal) {
+      setMenus((prev) => prev.map((day, i) => {
+        if (i !== selectedDay) return day;
+        const field = swapModal.type === 'Lunch' ? 'lunch' : 'dinner';
+        return { ...day, [field]: swappedMeal };
+      }));
+    }
+    setSwapModal({ open: false, meal: null, type: '' });
+  };
 
   const stats = [
     { icon: ArrowRightLeft, label: 'Swaps This Month', value: '12', color: 'text-gold' },
@@ -104,7 +118,7 @@ const DashboardPage = () => {
                     <span className="text-xs bg-white/5 px-3 py-1 rounded-full text-warm-grey">{todayMenu?.lunch?.calories} cal</span>
                   </div>
                   <p className="text-warm-grey text-sm mb-4">{todayMenu?.lunch?.description}</p>
-                  <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full bg-gold/10 border border-gold/30 text-gold py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-gold/20 transition-colors">
+                  <motion.button onClick={() => setSwapModal({ open: true, meal: todayMenu?.lunch, type: 'Lunch' })} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full bg-gold/10 border border-gold/30 text-gold py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-gold/20 transition-colors">
                     <ArrowRightLeft className="w-4 h-4" /> Swap Meal
                   </motion.button>
                 </div>
@@ -124,7 +138,7 @@ const DashboardPage = () => {
                     <span className="text-xs bg-white/5 px-3 py-1 rounded-full text-warm-grey">{todayMenu?.dinner?.calories} cal</span>
                   </div>
                   <p className="text-warm-grey text-sm mb-4">{todayMenu?.dinner?.description}</p>
-                  <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full bg-gold/10 border border-gold/30 text-gold py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-gold/20 transition-colors">
+                  <motion.button onClick={() => setSwapModal({ open: true, meal: todayMenu?.dinner, type: 'Dinner' })} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full bg-gold/10 border border-gold/30 text-gold py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-gold/20 transition-colors">
                     <ArrowRightLeft className="w-4 h-4" /> Swap Meal
                   </motion.button>
                 </div>
@@ -153,6 +167,15 @@ const DashboardPage = () => {
           </motion.div>
         )}
       </div>
+
+      {/* Swap Modal */}
+      <SwapModal
+        isOpen={swapModal.open}
+        onClose={handleSwapClose}
+        currentMeal={swapModal.meal}
+        swapOptions={todayMenu?.swapOptions}
+        mealType={swapModal.type}
+      />
     </div>
   );
 };
