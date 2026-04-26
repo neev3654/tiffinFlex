@@ -1,16 +1,23 @@
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Features from './components/Features';
-import Footer from './components/Footer';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import DashboardPage from './pages/DashboardPage';
+import MenuPage from './pages/MenuPage';
 
 function App() {
   return (
-    <div className="min-h-screen bg-espresso">
-      <Navbar />
-      <Hero />
-      <Features />
-      <Footer />
-    </div>
+    <Router>
+      <div className="min-h-screen bg-espresso">
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/menu" element={<MenuPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
