@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (email, password) => {
     if (email === 'demo@tiffinflex.com' && password === 'demo123') {
-      const userData = { name: 'Neetu Patel', email, plan: 'regular', diet: 'Vegetarian' };
+      const userData = { name: 'Neev Patel', email, plan: 'regular', diet: 'Vegetarian' };
       localStorage.setItem('tf_token', 'dummy-jwt-token');
       localStorage.setItem('tf_user', JSON.stringify(userData));
       setUser(userData);

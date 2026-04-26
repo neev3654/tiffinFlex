@@ -94,7 +94,7 @@ const SignupPage = () => {
                     <label className="text-sm text-warm-grey mb-1 block">Full Name</label>
                     <div className="relative">
                       <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-warm-grey" />
-                      <input value={form.name} onChange={(e) => update('name', e.target.value)} placeholder="Neetu Patel" className="w-full bg-espresso border border-white/10 rounded-xl pl-11 pr-4 py-3 text-offwhite placeholder:text-warm-grey/50 focus:outline-none focus:border-gold/50 transition-all" />
+                      <input value={form.name} onChange={(e) => update('name', e.target.value)} placeholder="Nee Patel" className="w-full bg-espresso border border-white/10 rounded-xl pl-11 pr-4 py-3 text-offwhite placeholder:text-warm-grey/50 focus:outline-none focus:border-gold/50 transition-all" />
                     </div>
                   </div>
                   <div>
