@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { UtensilsCrossed, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ const LoginPage = () => {
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,15 +20,14 @@ const LoginPage = () => {
       setError('Please fill in all fields.');
       return;
     }
-    // Dummy auth — accept any valid-looking credentials
-    if (email === 'demo@tiffinflex.com' && password === 'demo123') {
-      localStorage.setItem('tf_token', 'dummy-jwt-token');
-      localStorage.setItem('tf_user', JSON.stringify({ name: 'Neetu Patel', email }));
+    const result = login(email, password);
+    if (result.success) {
       navigate('/dashboard');
     } else {
-      setError('Invalid credentials. Try demo@tiffinflex.com / demo123');
+      setError(result.message);
     }
   };
+
 
   return (
     <div className="min-h-screen bg-espresso flex">

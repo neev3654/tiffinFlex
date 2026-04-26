@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { UtensilsCrossed, Menu, X } from 'lucide-react';
+import { UtensilsCrossed, Menu, X, LogOut, LayoutDashboard } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { user, isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+    setIsOpen(false);
+  };
 
   const navLinks = [
     { name: 'Our Menu', href: '/menu' },
@@ -27,66 +35,67 @@ const Navbar = () => {
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
-          {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group cursor-pointer">
             <UtensilsCrossed className="w-8 h-8 text-gold group-hover:rotate-12 transition-transform" />
             <span className="text-xl font-serif font-bold tracking-tight italic text-gold">TiffinFlex</span>
           </Link>
 
-          {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                to={link.href}
-                className="text-sm font-medium text-offwhite/80 hover:text-gold transition-colors relative group"
-              >
+              <Link key={link.name} to={link.href} className="text-sm font-medium text-offwhite/80 hover:text-gold transition-colors relative group">
                 {link.name}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold transition-all group-hover:w-full"></span>
               </Link>
             ))}
           </div>
 
-          {/* CTA Buttons */}
+          {/* Auth Buttons */}
           <div className="hidden md:flex items-center gap-4">
-            <button 
-              onClick={() => navigate('/login')}
-              className="text-sm font-medium text-gold hover:text-gold-light transition-colors"
-            >
-              Login
-            </button>
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => navigate('/signup')}
-              className="bg-gold hover:bg-gold-light text-espresso px-6 py-2 rounded-full font-bold text-sm transition-colors shadow-lg shadow-gold/20"
-            >
-              Subscribe Now
-            </motion.button>
+            {isAuthenticated ? (
+              <>
+                <Link to="/dashboard" className="flex items-center gap-2 text-sm font-medium text-offwhite/80 hover:text-gold transition-colors">
+                  <LayoutDashboard className="w-4 h-4" /> Dashboard
+                </Link>
+                <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center text-gold font-bold text-sm">
+                  {user?.name?.charAt(0) || 'U'}
+                </div>
+                <button onClick={handleLogout} className="text-sm text-warm-grey hover:text-red-400 transition-colors flex items-center gap-1">
+                  <LogOut className="w-4 h-4" /> Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <button onClick={() => navigate('/login')} className="text-sm font-medium text-gold hover:text-gold-light transition-colors">Login</button>
+                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => navigate('/signup')} className="bg-gold hover:bg-gold-light text-espresso px-6 py-2 rounded-full font-bold text-sm transition-colors shadow-lg shadow-gold/20">
+                  Subscribe Now
+                </motion.button>
+              </>
+            )}
           </div>
 
-          {/* Mobile Toggle */}
           <button className="md:hidden text-gold" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <X /> : <Menu />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isOpen && (
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="md:hidden bg-cocoa border-t border-white/5 px-4 py-6 flex flex-col gap-4"
-        >
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="md:hidden bg-cocoa border-t border-white/5 px-4 py-6 flex flex-col gap-4">
           {navLinks.map((link) => (
-            <Link key={link.name} to={link.href} onClick={() => setIsOpen(false)} className="text-lg font-medium text-offwhite hover:text-gold">
-              {link.name}
-            </Link>
+            <Link key={link.name} to={link.href} onClick={() => setIsOpen(false)} className="text-lg font-medium text-offwhite hover:text-gold">{link.name}</Link>
           ))}
           <div className="flex flex-col gap-3 pt-4 border-t border-white/5">
-            <button onClick={() => { navigate('/login'); setIsOpen(false); }} className="text-gold font-bold">Login</button>
-            <button onClick={() => { navigate('/signup'); setIsOpen(false); }} className="bg-gold text-espresso py-3 rounded-full font-bold">Subscribe Now</button>
+            {isAuthenticated ? (
+              <>
+                <Link to="/dashboard" onClick={() => setIsOpen(false)} className="text-gold font-bold flex items-center gap-2"><LayoutDashboard className="w-4 h-4" /> Dashboard</Link>
+                <button onClick={handleLogout} className="text-red-400 font-bold flex items-center gap-2"><LogOut className="w-4 h-4" /> Logout</button>
+              </>
+            ) : (
+              <>
+                <button onClick={() => { navigate('/login'); setIsOpen(false); }} className="text-gold font-bold">Login</button>
+                <button onClick={() => { navigate('/signup'); setIsOpen(false); }} className="bg-gold text-espresso py-3 rounded-full font-bold">Subscribe Now</button>
+              </>
+            )}
           </div>
         </motion.div>
       )}
