@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { UtensilsCrossed, Menu, X, LogOut, LayoutDashboard } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import NotificationBell from './NotificationBell';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -56,6 +57,7 @@ const Navbar = () => {
                 <Link to="/dashboard" className="flex items-center gap-2 text-sm font-medium text-offwhite/80 hover:text-gold transition-colors">
                   <LayoutDashboard className="w-4 h-4" /> Dashboard
                 </Link>
+                <NotificationBell />
                 <Link to="/profile" className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center text-gold font-bold text-sm hover:bg-gold/30 transition-colors">
                   {user?.name?.charAt(0) || 'U'}
                 </Link>
