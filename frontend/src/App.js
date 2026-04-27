@@ -10,6 +10,7 @@ import DashboardPage from './pages/DashboardPage';
 import MenuPage from './pages/MenuPage';
 import SubscriptionPage from './pages/SubscriptionPage';
 import ProfilePage from './pages/ProfilePage';
+import ReferralPage from './pages/ReferralPage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
               <Route path="/menu" element={<ProtectedRoute><MenuPage /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+              <Route path="/referral" element={<ProtectedRoute><ReferralPage /></ProtectedRoute>} />
             </Routes>
           </div>
           <Toast />

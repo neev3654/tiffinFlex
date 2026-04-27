@@ -27,7 +27,7 @@ const Navbar = () => {
     { name: 'Our Menu', href: '/menu' },
     { name: 'Subscription Plans', href: '/subscription' },
     { name: 'Sustainability', href: '#sustainability' },
-    { name: 'Gifting', href: '#gifting' },
+    { name: 'Refer & Earn', href: '/referral' },
   ];
 
   return (
