@@ -26,7 +26,7 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Our Menu', href: '/menu' },
     { name: 'Subscription Plans', href: '/subscription' },
-    { name: 'Sustainability', href: '#sustainability' },
+    { name: 'Nutrition Tracker', href: '/nutrition' },
     { name: 'Refer & Earn', href: '/referral' },
   ];
 
