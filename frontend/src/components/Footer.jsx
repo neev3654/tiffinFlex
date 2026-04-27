@@ -23,7 +23,7 @@ const Footer = () => {
             <ul className="space-y-3">
               {['Our Menu', 'Subscription Plans', 'How It Works', 'FAQ'].map((item) => (
                 <li key={item}>
-                  <a href="#" className="text-sm text-warm-grey hover:text-offwhite transition-colors">{item}</a>
+                  <a href="#!" className="text-sm text-warm-grey hover:text-offwhite transition-colors">{item}</a>
                 </li>
               ))}
             </ul>
@@ -35,7 +35,7 @@ const Footer = () => {
             <ul className="space-y-3">
               {['About Us', 'Sustainability', 'Careers', 'Contact'].map((item) => (
                 <li key={item}>
-                  <a href="#" className="text-sm text-warm-grey hover:text-offwhite transition-colors">{item}</a>
+                  <a href="#!" className="text-sm text-warm-grey hover:text-offwhite transition-colors">{item}</a>
                 </li>
               ))}
             </ul>
@@ -46,7 +46,7 @@ const Footer = () => {
             <h4 className="text-sm font-bold uppercase tracking-widest text-gold mb-4">Connect</h4>
             <div className="flex gap-4">
               {[Instagram, Twitter, Mail].map((Icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold/20 transition-colors">
+                <a key={i} href="#!" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold/20 transition-colors">
                   <Icon className="w-4 h-4 text-warm-grey hover:text-gold" />
                 </a>
               ))}
@@ -61,7 +61,7 @@ const Footer = () => {
           </p>
           <div className="flex gap-6">
             {['Privacy Policy', 'Terms of Service'].map((item) => (
-              <a key={item} href="#" className="text-xs text-warm-grey hover:text-offwhite transition-colors">{item}</a>
+              <a key={item} href="#!" className="text-xs text-warm-grey hover:text-offwhite transition-colors">{item}</a>
             ))}
           </div>
         </div>
