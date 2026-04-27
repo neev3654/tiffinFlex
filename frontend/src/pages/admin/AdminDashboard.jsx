@@ -9,6 +9,7 @@ import {
   XCircle, TrendingUp, Search, ChevronDown,
 } from 'lucide-react';
 import Navbar from '../../components/Navbar';
+import { Link } from 'react-router-dom';
 
 /* Dummy data */
 const revenueData = [
@@ -95,12 +96,20 @@ const AdminDashboard = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-10"
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10"
         >
-          <h1 className="text-3xl md:text-4xl font-serif font-bold text-offwhite mb-2">
-            Admin Dashboard <span className="text-gold">🛡️</span>
-          </h1>
-          <p className="text-warm-grey">Manage orders, menus, and subscribers.</p>
+          <div>
+            <h1 className="text-3xl md:text-4xl font-serif font-bold text-offwhite mb-2">
+              Admin Dashboard <span className="text-gold">🛡️</span>
+            </h1>
+            <p className="text-warm-grey">Manage orders, menus, and subscribers.</p>
+          </div>
+          <Link
+            to="/admin/menu"
+            className="flex items-center gap-2 bg-gold hover:bg-gold-light text-espresso px-5 py-2.5 rounded-xl font-bold text-sm transition-colors"
+          >
+            <UtensilsCrossed className="w-4 h-4" /> Manage Menu
+          </Link>
         </motion.div>
 
         {/* Summary Cards */}
