@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
 import Toast from './components/Toast';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
@@ -31,8 +32,8 @@ function App() {
               <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
               <Route path="/referral" element={<ProtectedRoute><ReferralPage /></ProtectedRoute>} />
               <Route path="/nutrition" element={<ProtectedRoute><NutritionPage /></ProtectedRoute>} />
-              <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-              <Route path="/admin/menu" element={<ProtectedRoute><MenuManager /></ProtectedRoute>} />
+              <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+              <Route path="/admin/menu" element={<AdminRoute><MenuManager /></AdminRoute>} />
             </Routes>
           </div>
           <Toast />

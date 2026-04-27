@@ -57,9 +57,11 @@ const Navbar = () => {
                 <Link to="/dashboard" className="flex items-center gap-2 text-sm font-medium text-offwhite/80 hover:text-gold transition-colors">
                   <LayoutDashboard className="w-4 h-4" /> Dashboard
                 </Link>
-                <Link to="/admin" className="flex items-center gap-2 text-sm font-medium text-offwhite/80 hover:text-gold transition-colors">
-                  <Shield className="w-4 h-4" /> Admin
-                </Link>
+                {user?.role === 'admin' && (
+                  <Link to="/admin" className="flex items-center gap-2 text-sm font-medium text-offwhite/80 hover:text-gold transition-colors">
+                    <Shield className="w-4 h-4" /> Admin
+                  </Link>
+                )}
                 <NotificationBell />
                 <Link to="/profile" className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center text-gold font-bold text-sm hover:bg-gold/30 transition-colors">
                   {user?.name?.charAt(0) || 'U'}

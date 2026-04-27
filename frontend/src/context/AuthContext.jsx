@@ -37,8 +37,15 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (err) {
       // Fallback: dummy auth when backend is offline
+      if (email === 'admin@tiffinflex.com' && password === 'admin123') {
+        const userData = { name: 'Admin', email, plan: 'pro', diet: 'Vegetarian', role: 'admin' };
+        localStorage.setItem('tf_token', 'dummy-jwt-token');
+        localStorage.setItem('tf_user', JSON.stringify(userData));
+        setUser(userData);
+        return { success: true };
+      }
       if (email === 'demo@tiffinflex.com' && password === 'demo123') {
-        const userData = { name: 'Neev Patel', email, plan: 'regular', diet: 'Vegetarian' };
+        const userData = { name: 'Neev Patel', email, plan: 'regular', diet: 'Vegetarian', role: 'user' };
         localStorage.setItem('tf_token', 'dummy-jwt-token');
         localStorage.setItem('tf_user', JSON.stringify(userData));
         setUser(userData);

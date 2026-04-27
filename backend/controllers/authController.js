@@ -21,6 +21,7 @@ const register = async (req, res) => {
       email: user.email,
       diet: user.diet,
       plan: user.plan,
+      role: user.role,
       token: generateToken(user._id),
     });
   } catch (error) {
@@ -41,6 +42,7 @@ const login = async (req, res) => {
         email: user.email,
         diet: user.diet,
         plan: user.plan,
+        role: user.role,
         token: generateToken(user._id),
       });
     } else {
