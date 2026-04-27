@@ -23,7 +23,7 @@ const Footer = () => {
             <ul className="space-y-3">
               {['Our Menu', 'Subscription Plans', 'How It Works', 'FAQ'].map((item) => (
                 <li key={item}>
-                  <a href="#" className="text-sm text-warm-grey hover:text-offwhite transition-colors">{item}</a>
+                  <a href="#!" className="text-sm text-warm-grey hover:text-offwhite transition-colors">{item}</a>
                 </li>
               ))}
             </ul>
@@ -35,7 +35,7 @@ const Footer = () => {
             <ul className="space-y-3">
               {['About Us', 'Sustainability', 'Careers', 'Contact'].map((item) => (
                 <li key={item}>
-                  <a href="#" className="text-sm text-warm-grey hover:text-offwhite transition-colors">{item}</a>
+                  <a href="#!" className="text-sm text-warm-grey hover:text-offwhite transition-colors">{item}</a>
                 </li>
               ))}
             </ul>

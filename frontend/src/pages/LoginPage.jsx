@@ -119,7 +119,7 @@ const LoginPage = () => {
                 <input type="checkbox" checked={remember} onChange={() => setRemember(!remember)} className="w-4 h-4 rounded border-white/10 bg-cocoa accent-gold" />
                 <span className="text-sm text-warm-grey">Remember me</span>
               </label>
-              <a href="#" className="text-sm text-gold hover:text-gold-light transition-colors">Forgot password?</a>
+              <a href="#!" className="text-sm text-gold hover:text-gold-light transition-colors">Forgot password?</a>
             </div>
 
             {/* Submit */}

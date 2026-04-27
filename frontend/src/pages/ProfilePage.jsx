@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   User, Heart, CreditCard, Settings, Camera, Save, CheckCircle,
-  Phone, Mail, MapPin, Bell, Lock, ChevronRight, Flame, Crown, Zap, Gem,
+  Phone, Mail, MapPin, Bell, Lock, ChevronRight, Crown, Zap, Gem,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
