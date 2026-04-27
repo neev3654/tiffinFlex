@@ -6,14 +6,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'espresso': '#120A06',
-        'cocoa': '#1A0F0A',
+        'espresso': 'rgb(var(--color-espresso) / <alpha-value>)',
+        'cocoa': 'rgb(var(--color-cocoa) / <alpha-value>)',
         'gold': {
-          DEFAULT: '#DAA520',
-          light: '#F5A623',
+          DEFAULT: 'rgb(var(--color-gold) / <alpha-value>)',
+          light: 'rgb(var(--color-gold-light) / <alpha-value>)',
         },
-        'offwhite': '#FDFBF7',
-        'warm-grey': '#A39690',
+        'offwhite': 'rgb(var(--color-offwhite) / <alpha-value>)',
+        'warm-grey': 'rgb(var(--color-warm-grey) / <alpha-value>)',
       },
       fontFamily: {
         serif: ['Playfair Display', 'serif'],

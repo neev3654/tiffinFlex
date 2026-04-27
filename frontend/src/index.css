@@ -5,11 +5,35 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-espresso text-offwhite font-sans antialiased;
+  :root {
+    /* Default Dark Theme (Spice Market) */
+    --color-espresso: 18 10 6;
+    --color-cocoa: 26 15 10;
+    --color-gold: 218 165 32;
+    --color-gold-light: 245 166 35;
+    --color-offwhite: 253 251 247;
+    --color-warm-grey: 163 150 144;
   }
-  
+
+  .light {
+    /* Light Theme (Vanilla Cream) */
+    --color-espresso: 249 250 251; /* gray-50 */
+    --color-cocoa: 255 255 255;    /* white */
+    --color-gold: 217 119 6;       /* amber-600 */
+    --color-gold-light: 245 158 11; /* amber-500 */
+    --color-offwhite: 17 24 39;    /* gray-900 */
+    --color-warm-grey: 75 85 99;   /* gray-600 */
+  }
+
+  body {
+    @apply bg-espresso text-offwhite font-sans antialiased transition-colors duration-300;
+  }
+
   h1, h2, h3, h4 {
     @apply font-serif;
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }

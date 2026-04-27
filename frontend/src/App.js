@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
+import { ThemeProvider } from './context/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import Toast from './components/Toast';
@@ -20,7 +21,8 @@ function App() {
   return (
     <AuthProvider>
       <NotificationProvider>
-        <Router>
+        <ThemeProvider>
+          <Router>
           <div className="min-h-screen bg-espresso">
             <Routes>
               <Route path="/" element={<LandingPage />} />
@@ -38,6 +40,7 @@ function App() {
           </div>
           <Toast />
         </Router>
+        </ThemeProvider>
       </NotificationProvider>
     </AuthProvider>
   );
