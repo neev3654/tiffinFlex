@@ -4,7 +4,9 @@ import { Check, X, Crown, Zap, Gem, Star, ArrowRight, CreditCard, Shield } from 
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import PaymentModal from '../components/PaymentModal';
 import plans from '../data/plans';
+import { useNavigate } from 'react-router-dom';
 
 const planIcons = {
   starter: Zap,
@@ -46,7 +48,9 @@ const allFeatures = [
 
 const SubscriptionPage = () => {
   const [isAnnual, setIsAnnual] = useState(false);
+  const [paymentModal, setPaymentModal] = useState({ isOpen: false, plan: null });
   const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const getPrice = (plan) => {
     if (isAnnual) return plan.annualPrice;
@@ -70,6 +74,17 @@ const SubscriptionPage = () => {
     const targetIndex = plans.findIndex((p) => p.id === planId);
     if (targetIndex > currentIndex) return 'Upgrade';
     return 'Downgrade';
+  };
+
+  const handleCtaClick = (plan) => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    if (isCurrentPlan(plan.id)) return;
+    
+    // Open payment modal
+    setPaymentModal({ isOpen: true, plan });
   };
 
   return (
@@ -224,6 +239,7 @@ const SubscriptionPage = () => {
                   whileHover={{ scale: isCurrent ? 1 : 1.02 }}
                   whileTap={{ scale: isCurrent ? 1 : 0.98 }}
                   disabled={isCurrent}
+                  onClick={() => handleCtaClick(plan)}
                   className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${
                     isCurrent
                       ? 'bg-white/5 text-warm-grey cursor-default border border-white/10'
@@ -341,6 +357,7 @@ const SubscriptionPage = () => {
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
+              onClick={() => handleCtaClick(plans[1])} // Default to regular
               className="bg-gold hover:bg-gold-light text-espresso px-8 py-3.5 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-gold/20 flex items-center gap-2"
               id="cta-start-trial"
             >
@@ -398,6 +415,13 @@ const SubscriptionPage = () => {
       </section>
 
       <Footer />
+
+      <PaymentModal
+        isOpen={paymentModal.isOpen}
+        onClose={() => setPaymentModal({ isOpen: false, plan: null })}
+        plan={paymentModal.plan}
+        isAnnual={isAnnual}
+      />
     </div>
   );
 };
