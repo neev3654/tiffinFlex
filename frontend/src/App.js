@@ -12,6 +12,8 @@ import SubscriptionPage from './pages/SubscriptionPage';
 import ProfilePage from './pages/ProfilePage';
 import ReferralPage from './pages/ReferralPage';
 import NutritionPage from './pages/NutritionPage';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import MenuManager from './pages/admin/MenuManager';
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
               <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
               <Route path="/referral" element={<ProtectedRoute><ReferralPage /></ProtectedRoute>} />
               <Route path="/nutrition" element={<ProtectedRoute><NutritionPage /></ProtectedRoute>} />
+              <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+              <Route path="/admin/menu" element={<ProtectedRoute><MenuManager /></ProtectedRoute>} />
             </Routes>
           </div>
           <Toast />
