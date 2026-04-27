@@ -56,9 +56,9 @@ const Navbar = () => {
                 <Link to="/dashboard" className="flex items-center gap-2 text-sm font-medium text-offwhite/80 hover:text-gold transition-colors">
                   <LayoutDashboard className="w-4 h-4" /> Dashboard
                 </Link>
-                <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center text-gold font-bold text-sm">
+                <Link to="/profile" className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center text-gold font-bold text-sm hover:bg-gold/30 transition-colors">
                   {user?.name?.charAt(0) || 'U'}
-                </div>
+                </Link>
                 <button onClick={handleLogout} className="text-sm text-warm-grey hover:text-red-400 transition-colors flex items-center gap-1">
                   <LogOut className="w-4 h-4" /> Logout
                 </button>
