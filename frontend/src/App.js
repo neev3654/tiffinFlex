@@ -13,6 +13,10 @@ import LoadingPage from './components/LoadingPage';
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const SignupPage = lazy(() => import('./pages/SignupPage'));
+const VerifyOtpPage = lazy(() => import('./pages/VerifyOtpPage'));
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
+const AuthCallback = lazy(() => import('./pages/AuthCallback'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const MenuPage = lazy(() => import('./pages/MenuPage'));
 const SubscriptionPage = lazy(() => import('./pages/SubscriptionPage'));
@@ -35,6 +39,10 @@ function App() {
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignupPage />} />
+                    <Route path="/verify-otp" element={<VerifyOtpPage />} />
+                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                    <Route path="/reset-password" element={<ResetPasswordPage />} />
+                    <Route path="/auth/callback" element={<AuthCallback />} />
                     <Route path="/subscription" element={<SubscriptionPage />} />
                     <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
                     <Route path="/menu" element={<ProtectedRoute><MenuPage /></ProtectedRoute>} />
