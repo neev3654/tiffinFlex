@@ -9,6 +9,12 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const logout = useCallback(() => {
+    localStorage.removeItem('tf_token');
+    localStorage.removeItem('tf_user');
+    setUser(null);
+  }, []);
+
   // Load user from token on mount
   useEffect(() => {
     const loadUser = async () => {
@@ -67,7 +73,7 @@ export const AuthProvider = ({ children }) => {
     return () => {
       API.interceptors.response.eject(interceptor);
     };
-  }, []);
+  }, [logout]);
 
   const login = async (email, password) => {
     try {
@@ -170,12 +176,6 @@ export const AuthProvider = ({ children }) => {
     const apiUrl = process.env.REACT_APP_API_URL;
     window.location.href = `${apiUrl}/auth/google`;
   };
-
-  const logout = useCallback(() => {
-    localStorage.removeItem('tf_token');
-    localStorage.removeItem('tf_user');
-    setUser(null);
-  }, []);
 
   const value = { 
     user, 
