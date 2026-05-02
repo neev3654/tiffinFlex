@@ -41,8 +41,22 @@ const SignupPage = () => {
   };
 
   const handleSubmit = async () => {
-    await signup({ name: form.name, email: form.email, password: form.password, selectedPlan: form.selectedPlan, diet: form.diet, selectedAllergies: form.selectedAllergies, spiceLevel: form.spiceLevel });
-    navigate('/dashboard');
+    const result = await signup({ 
+      name: form.name, 
+      email: form.email, 
+      password: form.password, 
+      selectedPlan: form.selectedPlan, 
+      diet: form.diet, 
+      selectedAllergies: form.selectedAllergies, 
+      spiceLevel: form.spiceLevel 
+    });
+    
+    if (result.success && result.requiresVerification) {
+      // Redirect to OTP verification
+      navigate('/verify-otp', { state: { email: result.email } });
+    } else if (!result.success) {
+      setError(result.message || 'Signup failed. Please try again.');
+    }
   };
 
 
