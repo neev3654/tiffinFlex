@@ -185,6 +185,9 @@ console.log(meals);
 | `POST` | `/verify-otp` | `{email, otp}` | `{token, user}` | No | Validates OTP and returns JWT | 200, 400, 404, 500 |
 | `POST` | `/login` | `{email, password}` | `{token, user}` | No | Authenticates existing user | 200, 401, 403, 404, 500 |
 | `GET` | `/me` | *None* | `User Object` | Yes | Fetches current user profile | 200, 401, 404, 500 |
+| `POST` | `/resend-otp` | `{email}` | `{message}` | No | Resends a new OTP to the given email | 200, 400, 404, 500 |
+
+> OTPs expire after 10 minutes.
 
 **Meal Routes (`/api/meals`)**
 | Method | Endpoint | Params/Body | Returns | Auth Required | Description | Status Codes |
@@ -205,7 +208,7 @@ console.log(meals);
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `PORT` | No | `5000` | Port for the Express server to listen on. |
-| `MONGODB_URI` | **Yes** | None | Connection string for MongoDB database. |
+| `MONGO_URI` | **Yes** | None | Connection string for MongoDB database. |
 | `JWT_SECRET` | **Yes** | None | Cryptographic key used to sign session tokens. |
 | `FRONTEND_URL` | **Yes** | None | Used for CORS whitelisting and OAuth redirects. |
 | `RESEND_API_KEY` | **Yes** | None | API key for transactional email delivery. |
@@ -282,7 +285,7 @@ This application is architected for decoupled deployment:
    * Output Directory: `dist`
    * The `vercel.json` ensures client-side routing fallback (SPA configuration).
 
-2. **Backend (Render / Heroku)**
+2. **Backend (Render)**
    * Hosted as a Node Web Service.
    * Start Command: `npm run start`
    * Ensure `trust proxy` is enabled in `server.js` for secure cookies over load balancers.
