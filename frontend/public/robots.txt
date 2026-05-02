@@ -1,3 +1,9 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /profile
+
+# Sitemaps
+Sitemap: https://tiffinflex.vercel.app/sitemap.xml
