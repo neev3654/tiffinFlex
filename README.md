@@ -9,8 +9,8 @@
 | **Figma Design** | [View Figma Mockups](https://www.figma.com/design/dFyEuSN5vcs57WZQup2XO8/Untitled?node-id=14-3&t=FVQOA6rq9WHwTOUw-1) |
 | **Live Project** | [View Deployed Frontend](https://tiffin-flex.vercel.app) |
 | **Backend API** | [View Deployed Backend](https://tiffinflex.onrender.com) |
-| **Postman Docs** | [View API Documentation](#) 
-| **YouTube Demo** | [Watch Project Demo](#) 
+| **Postman Docs** | [View API Documentation](https://documenter.getpostman.com/view/50839260/2sBXqKofJx) |
+| **YouTube Demo** | [Watch Project Demo](#) |
 
 ---
 
@@ -92,13 +92,10 @@ TiffinFlex/
 
 ## 📸 Project Screenshots
 
-*(Add your screenshots here)*
-
-> Example structure:
-> ```markdown
-> ![Landing Page](./frontend/public/screenshots/landing.png)
-> ![Dashboard](./frontend/public/screenshots/dashboard.png)
-> ```
+![Landing Page](./frontend/public/screenshots/landing.png)
+![Signup Page](./frontend/public/screenshots/signup.png)
+![Login Page](./frontend/public/screenshots/login.png)
+![Menu Catalog](./frontend/public/screenshots/menu.png)
 
 ---
 
