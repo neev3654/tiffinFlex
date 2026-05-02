@@ -8,6 +8,7 @@ const passport = require('passport');
 const session = require('express-session');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const mealRoutes = require('./routes/mealRoutes');
 
 const app = express();
 
@@ -48,6 +49,8 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/meals', mealRoutes);
+
 
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {
