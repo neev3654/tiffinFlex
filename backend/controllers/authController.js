@@ -14,9 +14,8 @@ const generateToken = (id) => {
 // Send OTP Email
 const sendOTPEmail = async (email, otp, name) => {
   if (!resend) {
-    console.warn('RESEND_API_KEY is not configured. OTP email was not sent.');
-    // For development without API key, you could return true and log the OTP
-    return false;
+    console.warn(`RESEND_API_KEY is not configured. Development OTP for ${email}: ${otp}`);
+    return true;
   }
   try {
     const { data, error } = await resend.emails.send({

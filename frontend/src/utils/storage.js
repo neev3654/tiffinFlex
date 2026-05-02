@@ -7,7 +7,12 @@ export const storage = {
     get: (key, defaultValue = null) => {
       try {
         const item = window.localStorage.getItem(key);
-        return item ? JSON.parse(item) : defaultValue;
+        if (!item) return defaultValue;
+        try {
+          return JSON.parse(item);
+        } catch (e) {
+          return item; // Fallback to raw string if not JSON
+        }
       } catch (error) {
         console.warn(`Error reading localStorage key "${key}":`, error);
         return defaultValue;
@@ -39,7 +44,12 @@ export const storage = {
     get: (key, defaultValue = null) => {
       try {
         const item = window.sessionStorage.getItem(key);
-        return item ? JSON.parse(item) : defaultValue;
+        if (!item) return defaultValue;
+        try {
+          return JSON.parse(item);
+        } catch (e) {
+          return item;
+        }
       } catch (error) {
         console.warn(`Error reading sessionStorage key "${key}":`, error);
         return defaultValue;

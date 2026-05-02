@@ -9,8 +9,8 @@
 | **Figma Design** | [View Figma Mockups](https://www.figma.com/design/dFyEuSN5vcs57WZQup2XO8/Untitled?node-id=14-3&t=FVQOA6rq9WHwTOUw-1) |
 | **Live Project** | [View Deployed Frontend](https://tiffin-flex.vercel.app) |
 | **Backend API** | [View Deployed Backend](https://tiffinflex.onrender.com) |
-| **Postman Docs** | [View API Documentation](#) *(Add Link Here)* |
-| **YouTube Demo** | [Watch Project Demo](#) *(Add Link Here)* |
+| **Postman Docs** | [View API Documentation](#) 
+| **YouTube Demo** | [Watch Project Demo](#) 
 
 ---
 
