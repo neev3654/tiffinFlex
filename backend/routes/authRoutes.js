@@ -23,18 +23,22 @@ console.log('Google OAuth Config:', {
   callbackURL: process.env.GOOGLE_CALLBACK_URL
 });
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL,
-    scope: ['profile', 'email']
-  },
-  async (accessToken, refreshToken, profile, done) => {
-    console.log('Google OAuth Success:', profile?.displayName || 'No profile');
-    // Store profile in req.user for the callback
-    return done(null, profile);
-  }
-));
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  passport.use(new GoogleStrategy({
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      scope: ['profile', 'email']
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      console.log('Google OAuth Success:', profile?.displayName || 'No profile');
+      // Store profile in req.user for the callback
+      return done(null, profile);
+    }
+  ));
+} else {
+  console.warn('⚠️ Google OAuth is disabled because GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET is missing.');
+}
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -53,15 +57,22 @@ router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
 
 // Google OAuth Routes
-router.get('/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
+router.get('/google', (req, res, next) => {
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    return res.status(500).json({ message: 'Google OAuth is not configured on the server.' });
+  }
+  passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);
+});
 
-router.get('/google/callback',
+router.get('/google/callback', (req, res, next) => {
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    return res.redirect(`${process.env.FRONTEND_URL}/login?error=google_auth_not_configured`);
+  }
   passport.authenticate('google', { 
     failureRedirect: `${process.env.FRONTEND_URL}/login?error=google_auth_failed`, 
     session: false 
-  }),
+  })(req, res, next);
+},
   async (req, res) => {
     try {
       console.log('Direct callback - req.user:', req.user);

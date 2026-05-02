@@ -4,8 +4,8 @@ const otpGenerator = require('otp-generator');
 const User = require('../models/User');
 const { Resend } = require('resend');
 
-// Initialize Resend
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend conditionally
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
@@ -13,6 +13,11 @@ const generateToken = (id) => {
 
 // Send OTP Email
 const sendOTPEmail = async (email, otp, name) => {
+  if (!resend) {
+    console.warn('RESEND_API_KEY is not configured. OTP email was not sent.');
+    // For development without API key, you could return true and log the OTP
+    return false;
+  }
   try {
     const { data, error } = await resend.emails.send({
       from: `TiffinFlex <${process.env.EMAIL_FROM}>`,
@@ -45,6 +50,10 @@ const sendOTPEmail = async (email, otp, name) => {
 
 // Send Password Reset Email
 const sendResetEmail = async (email, resetUrl, name) => {
+  if (!resend) {
+    console.warn('RESEND_API_KEY is not configured. Reset email was not sent.');
+    return false;
+  }
   try {
     const { data, error } = await resend.emails.send({
       from: `TiffinFlex <${process.env.EMAIL_FROM}>`,

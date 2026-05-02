@@ -11,6 +11,9 @@ const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
+// Trust proxy is required for Render/Heroku to correctly handle HTTPS and secure cookies
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(cors({
   origin: [
@@ -25,7 +28,11 @@ app.use(session({
   secret: process.env.JWT_SECRET || 'tiffinflex_session_secret',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 24 hours
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production', 
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    maxAge: 24 * 60 * 60 * 1000 
+  } // 24 hours
 }));
 app.use(passport.initialize());
 app.use(passport.session());
