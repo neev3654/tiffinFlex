@@ -1,22 +1,50 @@
-# 🍱 TiffinFlex — Premium Customizable Tiffin Service Platform
+# 🍱 TiffinFlex
 
-> A full-stack MERN web application designed to revolutionize the traditional tiffin delivery system by introducing flexibility, customization, and an elegant digital experience.
+> A premium, full-stack MERN web application designed to revolutionize the traditional tiffin delivery system by introducing flexibility, complete dietary customization, and an elegant digital experience.
+
+## 📎 Important Links
+
+| Resource | Link |
+|----------|------|
+| **Figma Design** | [View Figma Mockups](https://www.figma.com/design/dFyEuSN5vcs57WZQup2XO8/Untitled?node-id=14-3&t=FVQOA6rq9WHwTOUw-1) |
+| **Live Project** | [View Deployed Frontend](https://tiffin-flex.vercel.app) |
+| **Backend API** | [View Deployed Backend](https://tiffinflex.onrender.com) |
+| **Postman Docs** | [View API Documentation](#) *(Add Link Here)* |
+| **YouTube Demo** | [Watch Project Demo](#) *(Add Link Here)* |
+
+---
 
 ## 📌 Problem Statement
- Professionals using tiffin services receive fixed daily menus with zero flexibility. Dietary preferences, allergies, and taste preferences are often ignored. Users frequently receive meals they dislike multiple times a week but cannot modify them.
+Professionals using tiffin services receive fixed daily menus with zero flexibility. Dietary preferences, allergies, and taste preferences are often ignored. Users frequently receive meals they dislike multiple times a week but cannot modify them, leading to food waste and poor customer satisfaction.
 
-## 💡 The Solution
+## 💡 Solution
 TiffinFlex introduces a flexible and user-centric approach to tiffin services by providing a platform where subscribers can:
-* **Customize** daily meals within an active subscription
-* **Swap** meals effortlessly from available menu options
-* **Set dietary preferences** (vegetarian, vegan, allergies, spice levels)
-* **Track Nutrition** with real-time calorie and macronutrient visualization
+* **Customize** daily meals within an active subscription based on their plan credits.
+* **Swap** meals effortlessly from a wide variety of available menu options.
+* **Set precise dietary preferences** (vegetarian, vegan, allergies, spice levels).
+* **Track Nutrition** with real-time calorie and macronutrient visualization.
+
+---
+
+## 🚀 Features
+
+### 👤 For Subscribers (Users)
+* **Secure Authentication**: Email/Password + Google OAuth 2.0 integration.
+* **OTP Verification**: Secure email verification for new accounts via Resend API.
+* **Dynamic Dashboard**: View weekly schedules, streak counts, and health scores.
+* **Meal Swapping**: Browse daily menus and swap meals instantly.
+* **Nutrition Tracker**: Data-driven health monitoring with interactive UI.
+
+### 🛡️ For Providers (Admin)
+* **Admin Dashboard**: Real-time business analytics and revenue tracking.
+* **Menu Manager**: Complete CRUD operations for daily meals backed by MongoDB.
+* **Role Security**: Protected admin-only routes and actions via JWT.
 
 ---
 
 ## ⚙️ Tech Stack
 
-**Frontend Architecture:**
+**Frontend**
 * **React.js 18** (UI Framework)
 * **Redux Toolkit** (Global State Management)
 * **Formik & Yup** (Robust Form Handling & Validation)
@@ -24,112 +52,87 @@ TiffinFlex introduces a flexible and user-centric approach to tiffin services by
 * **Framer Motion** (Cinematic Animations)
 * **React Helmet Async** (Dynamic SEO)
 * **React GA4** (Google Analytics)
-* **Lucide React** (Iconography)
 
-**Backend Architecture:**
+**Backend**
 * **Node.js & Express.js** (REST API)
 * **MongoDB & Mongoose** (NoSQL Database)
 * **JWT & Passport.js** (Authentication & Google OAuth)
-* **Nodemailer** (OTP & Transactional Emails)
+* **Resend API** (Transactional OTP Emails)
 
 ---
 
-## 🚀 Key Features
-
-### 👤 For Subscribers (Users)
-* **Secure Authentication**: Email/Password + Google OAuth 2.0 integration.
-* **OTP Verification**: Secure email verification for new accounts.
-* **Smart Forms**: Standardized data entry with Formik, Yup validation, and session persistence.
-* **Meal Swapping**: Browse daily menus and swap meals based on plan credits.
-* **Premium UI**: 100% responsive design with skeleton loaders and shimmer effects.
-* **Nutrition Tracker**: Data-driven health monitoring with interactive charts.
-
-### 🛡️ For Providers (Admin)
-* **Admin Dashboard**: Real-time business analytics and revenue tracking.
-* **Menu Manager**: Complete CRUD for meals with inventory tracking.
-* **Role Security**: Protected admin-only routes and actions.
-
----
-
-## 📂 Project Structure
+## 📂 Proper Folder Structure
 
 ```text
 TiffinFlex/
 ├── backend/                  # Express.js REST API
-│   ├── config/               # DB & Passport config
-│   ├── controllers/          # Business logic
-│   ├── middleware/           # Auth & Validation
+│   ├── config/               # Database config
+│   ├── controllers/          # Business logic (Auth, Meals)
+│   ├── data/                 # Seed scripts
+│   ├── middleware/           # Auth & Role Validation
 │   ├── models/               # Mongoose Schemas
 │   ├── routes/               # API routes
-│   └── services/             # Email & External services
+│   └── server.js             # Main application entry point
 │
 ├── frontend/                 # React UI (Vite)
+│   ├── public/               # Static assets, sitemap.xml, robots.txt
 │   ├── src/
-│   │   ├── components/       # Reusable UI & Layout
-│   │   ├── store/            # Redux Slices & Config
-│   │   ├── hooks/            # Custom React hooks (Persistence, etc.)
-│   │   ├── utils/            # Validation, Analytics, API
-│   │   └── pages/            # View components
-│   └── public/               # Static assets
+│   │   ├── components/       # Reusable UI & Layouts
+│   │   ├── context/          # React Contexts
+│   │   ├── hooks/            # Custom React hooks
+│   │   ├── pages/            # Main view components
+│   │   ├── store/            # Redux Slices
+│   │   └── utils/            # Validation schemas, API interceptors
+│   ├── index.html            # Main HTML with SEO meta tags
+│   └── vite.config.js        # Vite configuration
 └── README.md
 ```
 
 ---
 
-## 💻 Local Setup & Installation
+## 📸 Project Screenshots
 
-### 1. Clone & Install
+*(Add your screenshots here)*
+
+> Example structure:
+> ```markdown
+> ![Landing Page](./frontend/public/screenshots/landing.png)
+> ![Dashboard](./frontend/public/screenshots/dashboard.png)
+> ```
+
+---
+
+## 🌐 SEO Implementation
+This project adheres to modern technical SEO standards:
+* **Dynamic Meta Tags**: Implemented via `react-helmet-async` for route-specific titles and descriptions.
+* **Sitemaps & Robots**: Custom `sitemap.xml` and `robots.txt` ensuring search engines crawl the site effectively.
+* **Semantic HTML**: Proper heading hierarchies and ARIA labels.
+* **Google Analytics**: Integrated GA4 for user event tracking.
+
+---
+
+## 💻 Local Setup
+
+1. **Clone the repository**
 ```bash
 git clone https://github.com/neev3654/tiffinFlex.git
 cd tiffinFlex
-# Install backend deps
-cd backend && npm install
-# Install frontend deps
-cd ../frontend && npm install
 ```
 
-### 2. Environment Variables
-Create `.env` in `backend/`:
-```env
-PORT=5000
-MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_secret
-GOOGLE_CLIENT_ID=your_id
-GOOGLE_CLIENT_SECRET=your_secret
-EMAIL_USER=your_email
-EMAIL_PASS=your_app_password
-```
-
-Create `.env` in `frontend/`:
-```env
-VITE_API_URL=http://localhost:5000/api
-```
-
-### 3. Run Development
+2. **Backend Setup**
 ```bash
-# Backend (from /backend)
-npm run dev
-
-# Frontend (from /frontend)
+cd backend
+npm install
+cp .env.example .env
+# Fill in your .env variables (MongoDB, JWT, Resend, Google OAuth)
 npm run dev
 ```
 
----
-
-## 🌐 SEO & Analytics
-* **SEO**: Every page features dynamic titles and meta descriptions via `react-helmet-async`.
-* **Analytics**: Google Analytics 4 (GA4) integrated to track user journeys and conversion events (signups, meal swaps).
-
----
-
-## 🎨 UI/UX Design
-* Initial UI wireframing and conceptualization designed in Figma.
-* [Figma Design Reference Link](https://www.figma.com/design/dFyEuSN5vcs57WZQup2XO8/Untitled?node-id=14-3&t=FVQOA6rq9WHwTOUw-1)
-
----
-
-## 🤝 Contributing
-Contributions, issues, and feature requests are welcome!
-
-## 📝 License
-This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.
+3. **Frontend Setup**
+```bash
+cd ../frontend
+npm install
+cp .env.example .env
+# Make sure VITE_API_URL points to your backend
+npm run dev
+```
