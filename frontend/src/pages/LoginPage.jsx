@@ -3,13 +3,13 @@ import { motion } from 'framer-motion';
 import { UtensilsCrossed, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Formik, Form } from 'formik';
 import { login, clearError } from '../store/slices/authSlice';
+import { loginSchema } from '../utils/validationSchemas';
+import FormInput from '../components/forms/FormInput';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [remember, setRemember] = useState(false);
   const [localError, setLocalError] = useState('');
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -36,17 +36,11 @@ const LoginPage = () => {
     }
   }, [requiresVerification, verificationEmail, navigate]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values) => {
     setLocalError('');
     dispatch(clearError());
 
-    if (!email || !password) {
-      setLocalError('Please fill in all fields.');
-      return;
-    }
-
-    const resultAction = await dispatch(login({ email, password }));
+    const resultAction = await dispatch(login(values));
     if (login.fulfilled.match(resultAction)) {
       if (!resultAction.payload.requiresVerification) {
         navigate('/dashboard');
@@ -57,8 +51,6 @@ const LoginPage = () => {
   const handleGoogleLogin = () => {
     window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
   };
-
-
 
   return (
     <div className="min-h-screen bg-espresso flex">
@@ -109,64 +101,68 @@ const LoginPage = () => {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
-            <div>
-              <label className="text-sm font-medium text-warm-grey mb-1.5 block">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-warm-grey" />
-                <input
+          <Formik
+            initialValues={{ email: '', password: '', remember: false }}
+            validationSchema={loginSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ values, setFieldValue }) => (
+              <Form className="space-y-5">
+                <FormInput
+                  label="Email"
+                  name="email"
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full bg-cocoa border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-offwhite placeholder:text-warm-grey/50 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all"
+                  icon={Mail}
                 />
-              </div>
-            </div>
 
-            {/* Password */}
-            <div>
-              <label className="text-sm font-medium text-warm-grey mb-1.5 block">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-warm-grey" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full bg-cocoa border border-white/10 rounded-xl pl-11 pr-12 py-3.5 text-offwhite placeholder:text-warm-grey/50 focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all"
-                />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-warm-grey hover:text-offwhite">
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
+                <div className="relative">
+                  <FormInput
+                    label="Password"
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    icon={Lock}
+                  />
+                  <button 
+                    type="button" 
+                    onClick={() => setShowPassword(!showPassword)} 
+                    className="absolute right-4 top-[42px] text-warm-grey hover:text-offwhite"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
 
-            {/* Remember + Forgot */}
-            <div className="flex justify-between items-center">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={remember} onChange={() => setRemember(!remember)} className="w-4 h-4 rounded border-white/10 bg-cocoa accent-gold" />
-                <span className="text-sm text-warm-grey">Remember me</span>
-              </label>
-              <Link to="/forgot-password" className="text-sm text-gold hover:text-gold-light transition-colors">Forgot password?</Link>
-            </div>
+                <div className="flex justify-between items-center">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      name="remember"
+                      checked={values.remember} 
+                      onChange={() => setFieldValue('remember', !values.remember)} 
+                      className="w-4 h-4 rounded border-white/10 bg-cocoa accent-gold" 
+                    />
+                    <span className="text-sm text-warm-grey">Remember me</span>
+                  </label>
+                  <Link to="/forgot-password" university className="text-sm text-gold hover:text-gold-light transition-colors">Forgot password?</Link>
+                </div>
 
-            {/* Submit */}
-            <motion.button
-              type="submit"
-              disabled={loading}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`w-full bg-gold hover:bg-gold-light text-espresso py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-gold/20 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
-            >
-              {loading ? (
-                <div className="w-6 h-6 border-2 border-espresso border-t-transparent rounded-full animate-spin"></div>
-              ) : (
-                <>Sign In <ArrowRight className="w-5 h-5" /></>
-              )}
-            </motion.button>
-          </form>
+                <motion.button
+                  type="submit"
+                  disabled={loading}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`w-full bg-gold hover:bg-gold-light text-espresso py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-gold/20 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                >
+                  {loading ? (
+                    <div className="w-6 h-6 border-2 border-espresso border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <>Sign In <ArrowRight className="w-5 h-5" /></>
+                  )}
+                </motion.button>
+              </Form>
+            )}
+          </Formik>
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
