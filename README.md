@@ -186,6 +186,8 @@ console.log(meals);
 | `POST` | `/login` | `{email, password}` | `{token, user}` | No | Authenticates existing user | 200, 401, 403, 404, 500 |
 | `GET` | `/me` | *None* | `User Object` | Yes | Fetches current user profile | 200, 401, 404, 500 |
 | `POST` | `/resend-otp` | `{email}` | `{message}` | No | Resends a new OTP to the given email | 200, 400, 404, 500 |
+| `GET` | `/google` | None | Redirect to Google | No | Initiates Google OAuth 2.0 consent flow | 302, 500 |
+| `GET` | `/google/callback` | OAuth code (query param) | Redirect with token & user | No | Google callback — redirects to frontend with token | 302 |
 
 > OTPs expire after 10 minutes.
 
@@ -212,6 +214,7 @@ console.log(meals);
 | `JWT_SECRET` | **Yes** | None | Cryptographic key used to sign session tokens. |
 | `FRONTEND_URL` | **Yes** | None | Used for CORS whitelisting and OAuth redirects. |
 | `RESEND_API_KEY` | **Yes** | None | API key for transactional email delivery. |
+| `EMAIL_FROM` | No | None | Sender address used in transactional OTP emails. |
 | `GOOGLE_CLIENT_ID` | No | None | OAuth 2.0 client ID for Google SSO. |
 | `GOOGLE_CLIENT_SECRET` | No | None | OAuth 2.0 client secret. |
 
