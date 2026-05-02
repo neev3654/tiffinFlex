@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UtensilsCrossed, User, Mail, Lock, ArrowRight, ArrowLeft, Check } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { signup, clearError } from '../store/slices/authSlice';
 import plans from '../data/plans';
 
 const steps = ['Account', 'Preferences', 'Plan'];
@@ -16,9 +17,10 @@ const SignupPage = () => {
     name: '', email: '', password: '', confirmPassword: '',
     diet: '', selectedAllergies: [], spiceLevel: 'Medium', selectedPlan: 'regular',
   });
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
   const navigate = useNavigate();
-  const { signup } = useAuth();
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth);
 
   const update = (field, value) => setForm({ ...form, [field]: value });
 
@@ -30,18 +32,22 @@ const SignupPage = () => {
   };
 
   const nextStep = () => {
-    setError('');
+    setLocalError('');
+    dispatch(clearError());
     if (step === 0) {
-      if (!form.name || !form.email || !form.password) return setError('All fields are required.');
-      if (form.password.length < 6) return setError('Password must be at least 6 characters.');
-      if (form.password !== form.confirmPassword) return setError('Passwords do not match.');
+      if (!form.name || !form.email || !form.password) return setLocalError('All fields are required.');
+      if (form.password.length < 6) return setLocalError('Password must be at least 6 characters.');
+      if (form.password !== form.confirmPassword) return setLocalError('Passwords do not match.');
     }
-    if (step === 1 && !form.diet) return setError('Please select a dietary preference.');
+    if (step === 1 && !form.diet) return setLocalError('Please select a dietary preference.');
     if (step < 2) setStep(step + 1);
   };
 
   const handleSubmit = async () => {
-    const result = await signup({ 
+    setLocalError('');
+    dispatch(clearError());
+
+    const resultAction = await dispatch(signup({ 
       name: form.name, 
       email: form.email, 
       password: form.password, 
@@ -49,13 +55,12 @@ const SignupPage = () => {
       diet: form.diet, 
       selectedAllergies: form.selectedAllergies, 
       spiceLevel: form.spiceLevel 
-    });
-    
-    if (result.success && result.requiresVerification) {
-      // Redirect to OTP verification
-      navigate('/verify-otp', { state: { email: result.email } });
-    } else if (!result.success) {
-      setError(result.message || 'Signup failed. Please try again.');
+    }));
+
+    if (signup.fulfilled.match(resultAction)) {
+      if (resultAction.payload.requiresVerification) {
+        navigate('/verify-otp', { state: { email: resultAction.payload.email } });
+      }
     }
   };
 
@@ -95,8 +100,8 @@ const SignupPage = () => {
 
         {/* Card */}
         <div className="bg-cocoa border border-white/5 rounded-2xl p-8">
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-6 text-sm">{error}</div>
+          {(localError || error) && (
+            <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-6 text-sm">{localError || error}</div>
           )}
 
           <AnimatePresence mode="wait">
@@ -203,8 +208,18 @@ const SignupPage = () => {
                 Next <ArrowRight className="w-4 h-4" />
               </motion.button>
             ) : (
-              <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={handleSubmit} className="flex-1 bg-gold text-espresso py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-gold-light transition-colors">
-                Start My Tiffin <ArrowRight className="w-4 h-4" />
+              <motion.button 
+                whileHover={{ scale: 1.02 }} 
+                whileTap={{ scale: 0.98 }} 
+                onClick={handleSubmit} 
+                disabled={loading}
+                className={`flex-1 bg-gold text-espresso py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-gold-light transition-colors ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+              >
+                {loading ? (
+                  <div className="w-5 h-5 border-2 border-espresso border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <>Start My Tiffin <ArrowRight className="w-4 h-4" /></>
+                )}
               </motion.button>
             )}
           </div>

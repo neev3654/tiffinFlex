@@ -1,9 +1,10 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useSelector } from 'react-redux';
 
 const AdminRoute = ({ children }) => {
-  const { user, isAuthenticated, loading } = useAuth();
+  const { user, token, loading } = useSelector((state) => state.auth);
+  const isAuthenticated = !!token;
 
   if (loading) return null;
   if (!isAuthenticated) return <Navigate to="/login" replace />;

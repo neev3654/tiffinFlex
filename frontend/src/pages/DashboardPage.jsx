@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { CalendarDays, ArrowRightLeft, Flame, TrendingUp, ChefHat, Clock, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useSelector } from 'react-redux';
 import Navbar from '../components/Navbar';
 import SwapModal from '../components/SwapModal';
 import weeklyMenu from '../data/weeklyMenu';
@@ -10,7 +10,7 @@ import weeklyMenu from '../data/weeklyMenu';
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 const DashboardPage = () => {
-  const { user } = useAuth();
+  const { user } = useSelector((state) => state.auth);
   const [selectedDay, setSelectedDay] = useState(0);
   const [swapModal, setSwapModal] = useState({ open: false, meal: null, type: '' });
   const [menus, setMenus] = useState(weeklyMenu);

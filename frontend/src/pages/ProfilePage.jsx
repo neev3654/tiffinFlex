@@ -4,7 +4,8 @@ import {
   User, Heart, CreditCard, Settings, Camera, Save, CheckCircle,
   Phone, Mail, MapPin, Bell, Lock, ChevronRight, Crown, Zap, Gem,
 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { addNotification } from '../store/slices/uiSlice';
 import Navbar from '../components/Navbar';
 import plans from '../data/plans';
 
@@ -19,9 +20,9 @@ const allergenOptions = ['Dairy', 'Gluten', 'Nuts', 'Soy', 'Eggs', 'Shellfish', 
 const cuisineOptions = ['North Indian', 'South Indian', 'Chinese', 'Continental', 'Italian', 'Thai'];
 
 const ProfilePage = () => {
-  const { user } = useAuth();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
   const [activeTab, setActiveTab] = useState('profile');
-  const [toast, setToast] = useState(null);
 
   /* Editable form state */
   const [form, setForm] = useState({
@@ -66,8 +67,7 @@ const ProfilePage = () => {
   };
 
   const handleSave = () => {
-    setToast('Changes saved successfully!');
-    setTimeout(() => setToast(null), 3000);
+    dispatch(addNotification({ message: 'Changes saved successfully!', type: 'success' }));
   };
 
   const currentPlan = plans.find((p) => p.id === (user?.plan || 'regular'));
@@ -437,19 +437,6 @@ const ProfilePage = () => {
         </motion.div>
       </div>
 
-      {/* Toast Notification */}
-      <AnimatePresence>
-        {toast && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-6 right-6 bg-emerald-500 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-2 font-bold text-sm z-50"
-          >
-            <CheckCircle className="w-5 h-5" /> {toast}
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };

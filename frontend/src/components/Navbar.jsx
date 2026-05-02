@@ -2,16 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { UtensilsCrossed, Menu, X, LogOut, LayoutDashboard, Shield, Moon, Sun } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../store/slices/authSlice';
+import { toggleTheme } from '../store/slices/themeSlice';
 import NotificationBell from './NotificationBell';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const { user, isAuthenticated, logout } = useAuth();
-  const { isDarkMode, toggleTheme } = useTheme();
+  const dispatch = useDispatch();
+  const { user, token } = useSelector((state) => state.auth);
+  const { darkMode } = useSelector((state) => state.theme);
+  const isAuthenticated = !!token;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -20,9 +23,13 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    logout();
+    dispatch(logout());
     navigate('/');
     setIsOpen(false);
+  };
+
+  const handleToggleTheme = () => {
+    dispatch(toggleTheme());
   };
 
   const navLinks = [
@@ -54,11 +61,11 @@ const Navbar = () => {
 
           {/* Theme Toggle Button */}
           <button
-            onClick={toggleTheme}
+            onClick={handleToggleTheme}
             className="w-10 h-10 rounded-full flex items-center justify-center text-warm-grey hover:bg-white/5 hover:text-gold transition-colors hidden md:flex"
             aria-label="Toggle Theme"
           >
-            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
 
           {/* Auth Buttons */}
@@ -93,11 +100,11 @@ const Navbar = () => {
 
           <div className="flex items-center gap-4 md:hidden">
             <button
-              onClick={toggleTheme}
+              onClick={handleToggleTheme}
               className="text-warm-grey hover:text-gold transition-colors"
               aria-label="Toggle Theme"
             >
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
             <button className="text-gold" onClick={() => setIsOpen(!isOpen)}>
               {isOpen ? <X /> : <Menu />}

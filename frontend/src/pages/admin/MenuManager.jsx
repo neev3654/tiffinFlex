@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus, Edit3, Trash2, Save, X, UtensilsCrossed, Search,
 } from 'lucide-react';
-import { useNotifications } from '../../context/NotificationContext';
+import { useDispatch } from 'react-redux';
+import { addNotification } from '../../store/slices/uiSlice';
 import Navbar from '../../components/Navbar';
 
 const initialMeals = [
@@ -19,7 +20,7 @@ const emptyMeal = { name: '', category: 'North Indian', calories: '', price: '',
 const categories = ['North Indian', 'South Indian', 'Continental', 'Chinese', 'Thali'];
 
 const MenuManager = () => {
-  const { showToast } = useNotifications();
+  const dispatch = useDispatch();
   const [meals, setMeals] = useState(initialMeals);
   const [search, setSearch] = useState('');
   const [editing, setEditing] = useState(null); // meal id or 'new'
@@ -46,25 +47,25 @@ const MenuManager = () => {
 
   const saveMeal = () => {
     if (!form.name || !form.calories || !form.price) {
-      showToast('Please fill all required fields.', 'error');
+      dispatch(addNotification({ message: 'Please fill all required fields.', type: 'error' }));
       return;
     }
     if (editing === 'new') {
       const newMeal = { ...form, id: Date.now(), calories: +form.calories, price: +form.price, inventory: +form.inventory || 0 };
       setMeals((prev) => [...prev, newMeal]);
-      showToast(`"${form.name}" added to menu!`, 'success');
+      dispatch(addNotification({ message: `"${form.name}" added to menu!`, type: 'success' }));
     } else {
       setMeals((prev) => prev.map((m) =>
         m.id === editing ? { ...form, calories: +form.calories, price: +form.price, inventory: +form.inventory || 0 } : m
       ));
-      showToast(`"${form.name}" updated!`, 'success');
+      dispatch(addNotification({ message: `"${form.name}" updated!`, type: 'success' }));
     }
     cancelEdit();
   };
 
   const deleteMeal = (id, name) => {
     setMeals((prev) => prev.filter((m) => m.id !== id));
-    showToast(`"${name}" removed from menu.`, 'info');
+    dispatch(addNotification({ message: `"${name}" removed from menu.`, type: 'info' }));
   };
 
   const toggleActive = (id) => {

@@ -4,8 +4,8 @@ import {
   Gift, Copy, Share2, CheckCircle, Users, Trophy, Star,
   ArrowRight, Crown, Medal, Award,
 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import { useNotifications } from '../context/NotificationContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { addNotification } from '../store/slices/uiSlice';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
@@ -34,8 +34,8 @@ const rankColors = {
 };
 
 const ReferralPage = () => {
-  const { user } = useAuth();
-  const { showToast } = useNotifications();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
   const [copied, setCopied] = useState(false);
 
   const referralCode = `TIFFIN-${(user?.name || 'NEEV').split(' ')[0].toUpperCase()}-2026`;
@@ -44,7 +44,7 @@ const ReferralPage = () => {
   const copyLink = () => {
     navigator.clipboard.writeText(referralLink).catch(() => {});
     setCopied(true);
-    showToast('Referral link copied!', 'success');
+    dispatch(addNotification({ message: 'Referral link copied!', type: 'success' }));
     setTimeout(() => setCopied(false), 2500);
   };
 

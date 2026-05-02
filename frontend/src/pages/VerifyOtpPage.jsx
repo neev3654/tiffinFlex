@@ -2,20 +2,24 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { UtensilsCrossed, ArrowRight, RefreshCw, CheckCircle } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { verifyOTP, clearError } from '../store/slices/authSlice';
 import API from '../utils/api';
 
 const VerifyOtpPage = () => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [localError, setLocalError] = useState('');
   const [resendTimer, setResendTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [isResending, setIsResending] = useState(false);
   
   const navigate = useNavigate();
   const location = useLocation();
   const inputRefs = useRef([]);
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth);
 
   useEffect(() => {
     // Get email from navigation state
@@ -79,46 +83,37 @@ const VerifyOtpPage = () => {
   const handleSubmit = async () => {
     const otpString = otp.join('');
     if (otpString.length !== 6) {
-      setError('Please enter all 6 digits');
+      setLocalError('Please enter all 6 digits');
       return;
     }
 
-    setLoading(true);
-    setError('');
+    setLocalError('');
+    dispatch(clearError());
 
-    try {
-      const { data } = await API.post('/auth/verify-otp', { email, otp: otpString });
-      
-      // Store token and user data
-      localStorage.setItem('tf_token', data.token);
-      localStorage.setItem('tf_user', JSON.stringify(data));
-      
+    const resultAction = await dispatch(verifyOTP({ email, otp: otpString }));
+    if (verifyOTP.fulfilled.match(resultAction)) {
       setSuccess(true);
-      
-      // Redirect after showing success
       setTimeout(() => {
         navigate('/dashboard');
       }, 1500);
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to verify OTP. Please try again.');
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleResend = async () => {
     if (!canResend) return;
 
-    setLoading(true);
+    setIsResending(true);
+    setLocalError('');
+    dispatch(clearError());
+    
     try {
       await API.post('/auth/resend-otp', { email });
       setResendTimer(60);
       setCanResend(false);
-      setError('');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to resend OTP');
+      setLocalError(err.response?.data?.message || 'Failed to resend OTP');
     } finally {
-      setLoading(false);
+      setIsResending(false);
     }
   };
 
@@ -163,9 +158,9 @@ const VerifyOtpPage = () => {
             <span className="text-offwhite">{email}</span>
           </p>
 
-          {error && (
+          {(localError || error) && (
             <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-6 text-sm text-center">
-              {error}
+              {localError || error}
             </div>
           )}
 
@@ -208,10 +203,10 @@ const VerifyOtpPage = () => {
             {canResend ? (
               <button
                 onClick={handleResend}
-                disabled={loading}
+                disabled={isResending}
                 className="text-gold font-bold hover:text-gold-light transition-colors"
               >
-                Resend
+                {isResending ? 'Resending...' : 'Resend'}
               </button>
             ) : (
               <span className="text-warm-grey">

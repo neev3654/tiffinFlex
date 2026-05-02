@@ -7,7 +7,7 @@ import {
 import {
   Flame, Target, TrendingUp, Award, Zap, ChevronDown,
 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useSelector } from 'react-redux';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
@@ -54,7 +54,7 @@ const CalorieTooltip = ({ active, payload, label }) => {
 };
 
 const NutritionPage = () => {
-  const { user } = useAuth();
+  const { user } = useSelector((state) => state.auth);
   const [dailyGoal, setDailyGoal] = useState(2000);
   const [showGoalPicker, setShowGoalPicker] = useState(false);
 

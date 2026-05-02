@@ -2,48 +2,60 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { UtensilsCrossed, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, clearError } from '../store/slices/authSlice';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { login, loginWithGoogle } = useAuth();
+  const dispatch = useDispatch();
+  const { loading, error, requiresVerification, verificationEmail } = useSelector((state) => state.auth);
 
   // Handle error from URL (e.g., from Google OAuth failure)
   useEffect(() => {
     const errorParam = searchParams.get('error');
     if (errorParam === 'google_auth_failed') {
-      setError('Google authentication failed. Please try again.');
+      setLocalError('Google authentication failed. Please try again.');
     } else if (errorParam === 'auth_failed') {
-      setError('Authentication failed. Please try again.');
+      setLocalError('Authentication failed. Please try again.');
     }
-  }, [searchParams]);
+    
+    return () => {
+      dispatch(clearError());
+    };
+  }, [searchParams, dispatch]);
+
+  useEffect(() => {
+    if (requiresVerification && verificationEmail) {
+      navigate('/verify-otp', { state: { email: verificationEmail } });
+    }
+  }, [requiresVerification, verificationEmail, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setLocalError('');
+    dispatch(clearError());
+
     if (!email || !password) {
-      setError('Please fill in all fields.');
+      setLocalError('Please fill in all fields.');
       return;
     }
-    const result = await login(email, password);
-    if (result.success) {
-      navigate('/dashboard');
-    } else if (result.requiresVerification) {
-      // Redirect to OTP verification
-      navigate('/verify-otp', { state: { email: result.email } });
-    } else {
-      setError(result.message);
+
+    const resultAction = await dispatch(login({ email, password }));
+    if (login.fulfilled.match(resultAction)) {
+      if (!resultAction.payload.requiresVerification) {
+        navigate('/dashboard');
+      }
     }
   };
 
   const handleGoogleLogin = () => {
-    loginWithGoogle();
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
   };
 
 
@@ -91,9 +103,9 @@ const LoginPage = () => {
           <h1 className="text-3xl font-serif font-bold text-offwhite mb-2">Sign In</h1>
           <p className="text-warm-grey mb-8">Enter your credentials to access your account.</p>
 
-          {error && (
+          {(localError || error) && (
             <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-6 text-sm">
-              {error}
+              {localError || error}
             </div>
           )}
 
@@ -143,11 +155,16 @@ const LoginPage = () => {
             {/* Submit */}
             <motion.button
               type="submit"
+              disabled={loading}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full bg-gold hover:bg-gold-light text-espresso py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-gold/20"
+              className={`w-full bg-gold hover:bg-gold-light text-espresso py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-gold/20 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
-              Sign In <ArrowRight className="w-5 h-5" />
+              {loading ? (
+                <div className="w-6 h-6 border-2 border-espresso border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <>Sign In <ArrowRight className="w-5 h-5" /></>
+              )}
             </motion.button>
           </form>
 

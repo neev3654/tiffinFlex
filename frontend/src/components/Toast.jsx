@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, AlertCircle, Info, X } from 'lucide-react';
-import { useNotifications } from '../context/NotificationContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeNotification } from '../store/slices/uiSlice';
 
 const iconMap = {
   success: CheckCircle,
@@ -16,7 +17,8 @@ const colorMap = {
 };
 
 const Toast = () => {
-  const { toasts, dismissToast } = useNotifications();
+  const dispatch = useDispatch();
+  const { toasts } = useSelector((state) => state.ui);
 
   return (
     <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none">
@@ -35,7 +37,7 @@ const Toast = () => {
               <Icon className="w-5 h-5 flex-shrink-0" />
               <span className="flex-1">{toast.message}</span>
               <button
-                onClick={() => dismissToast(toast.id)}
+                onClick={() => dispatch(removeNotification(toast.id))}
                 className="text-white/60 hover:text-white transition-colors flex-shrink-0"
               >
                 <X className="w-4 h-4" />

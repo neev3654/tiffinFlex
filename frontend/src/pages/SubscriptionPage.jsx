@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, X, Crown, Zap, Gem, Star, ArrowRight, CreditCard, Shield } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useSelector } from 'react-redux';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import PaymentModal from '../components/PaymentModal';
@@ -49,7 +49,8 @@ const allFeatures = [
 const SubscriptionPage = () => {
   const [isAnnual, setIsAnnual] = useState(false);
   const [paymentModal, setPaymentModal] = useState({ isOpen: false, plan: null });
-  const { user, isAuthenticated } = useAuth();
+  const { user, token } = useSelector((state) => state.auth);
+  const isAuthenticated = !!token;
   const navigate = useNavigate();
 
   const getPrice = (plan) => {

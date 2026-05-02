@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, ArrowRightLeft, CalendarDays, CreditCard, Truck, Gift, Check } from 'lucide-react';
-import { useNotifications } from '../context/NotificationContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { markAsRead, markAllRead } from '../store/slices/uiSlice';
 
 const typeIcons = {
   swap: ArrowRightLeft,
@@ -22,7 +23,12 @@ const typeColors = {
 const NotificationBell = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const { notifications, unreadCount, markAsRead, markAllRead } = useNotifications();
+  const dispatch = useDispatch();
+  const { persistentNotifications: notifications } = useSelector((state) => state.ui);
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  const handleMarkAsRead = (id) => dispatch(markAsRead(id));
+  const handleMarkAllRead = () => dispatch(markAllRead());
 
   /* Close dropdown on outside click */
   useEffect(() => {
@@ -74,7 +80,7 @@ const NotificationBell = () => {
               </h3>
               {unreadCount > 0 && (
                 <button
-                  onClick={markAllRead}
+                  onClick={handleMarkAllRead}
                   className="text-xs text-gold hover:text-gold-light font-medium transition-colors flex items-center gap-1"
                 >
                   <Check className="w-3 h-3" /> Mark all read
@@ -90,7 +96,7 @@ const NotificationBell = () => {
                 return (
                   <button
                     key={notif.id}
-                    onClick={() => markAsRead(notif.id)}
+                    onClick={() => handleMarkAsRead(notif.id)}
                     className={`w-full flex items-start gap-3 px-5 py-4 text-left hover:bg-white/[0.03] transition-colors border-b border-white/5 last:border-0 ${
                       !notif.read ? 'bg-white/[0.02]' : ''
                     }`}
