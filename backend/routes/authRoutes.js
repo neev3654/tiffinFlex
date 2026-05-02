@@ -10,6 +10,7 @@ const {
   resetPassword,
   googleCallback,
   getMe,
+  updateProfile,
   generateToken
 } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
@@ -95,8 +96,9 @@ router.get('/google/callback', (req, res, next) => {
   }
 );
 
-// Protected Route
+// Protected Routes
 router.get('/me', protect, getMe);
+router.put('/profile', protect, updateProfile);
 
 // Refresh Token Route
 router.post('/refresh', protect, (req, res) => {
@@ -105,3 +107,4 @@ router.post('/refresh', protect, (req, res) => {
 });
 
 module.exports = router;
+

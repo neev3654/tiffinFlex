@@ -443,6 +443,44 @@ const getMe = async (req, res) => {
   }
 };
 
+// PUT /api/auth/profile
+const updateProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const { name, diet, allergies, spiceLevel, plan, avatar, phone } = req.body;
+
+    if (name) user.name = name;
+    if (diet) user.diet = diet;
+    if (allergies) user.allergies = allergies;
+    if (spiceLevel) user.spiceLevel = spiceLevel;
+    if (plan) user.plan = plan;
+    if (avatar) user.avatar = avatar;
+    if (phone) user.phone = phone;
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      diet: updatedUser.diet,
+      allergies: updatedUser.allergies,
+      spiceLevel: updatedUser.spiceLevel,
+      plan: updatedUser.plan,
+      role: updatedUser.role,
+      avatar: updatedUser.avatar,
+      isVerified: updatedUser.isVerified,
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = { 
   register, 
   verifyOTP, 
@@ -452,5 +490,7 @@ module.exports = {
   resetPassword,
   googleCallback,
   getMe,
+  updateProfile,
   generateToken
 };
+
