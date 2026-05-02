@@ -143,7 +143,7 @@ const DashboardPage = () => {
                 key={day}
                 onClick={() => setSelectedDay(i)}
                 className={`py-3 rounded-xl text-center text-sm font-bold transition-all ${
-                  selectedDay === i ? 'bg-gold text-espresso' : weeklyMenu[i]?.isSkipped ? 'bg-white/5 text-warm-grey/40 line-through' : 'bg-cocoa border border-white/5 text-warm-grey hover:border-gold/30'
+                  selectedDay === i ? 'bg-gold text-espresso' : menus[i]?.isSkipped ? 'bg-white/5 text-warm-grey/40 line-through' : 'bg-cocoa border border-white/5 text-warm-grey hover:border-gold/30'
                 }`}
               >
                 {day}

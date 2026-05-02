@@ -50,7 +50,7 @@ const VerifyOtpPage = () => {
     const newOtp = [...otp];
     newOtp[index] = value.slice(-1);
     setOtp(newOtp);
-    setError('');
+    setLocalError('');
 
     // Auto-focus next input
     if (value && index < 5) {
