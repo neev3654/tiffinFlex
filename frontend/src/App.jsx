@@ -1,6 +1,8 @@
 import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Provider, useDispatch, useSelector } from 'react-redux';
+import { HelmetProvider } from 'react-helmet-async';
+import ReactGA from 'react-ga4';
 import store from './store';
 import { loadUser } from './store/slices/authSlice';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -8,6 +10,10 @@ import AdminRoute from './components/AdminRoute';
 import Toast from './components/Toast';
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingPage from './components/LoadingPage';
+
+// Initialize GA4 (Replace with your Measurement ID in production)
+const GA_MEASUREMENT_ID = "G-XXXXXXXXXX"; 
+ReactGA.initialize(GA_MEASUREMENT_ID);
 
 // Lazy loaded pages
 const LandingPage = lazy(() => import('./pages/LandingPage'));
@@ -26,6 +32,17 @@ const NutritionPage = lazy(() => import('./pages/NutritionPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const MenuManager = lazy(() => import('./pages/admin/MenuManager'));
 
+// Analytics wrapper to track page views
+const AnalyticsTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
+  }, [location]);
+
+  return null;
+};
+
 function AppContent() {
   const dispatch = useDispatch();
   const { darkMode } = useSelector((state) => state.theme);
@@ -43,6 +60,7 @@ function AppContent() {
 
   return (
     <Router>
+      <AnalyticsTracker />
       <ErrorBoundary>
         <div className={`min-h-screen ${darkMode ? 'dark bg-espresso' : 'bg-white'} transition-colors duration-300`}>
           <Suspense fallback={<LoadingPage />}>
@@ -74,10 +92,11 @@ function AppContent() {
 function App() {
   return (
     <Provider store={store}>
-      <AppContent />
+      <HelmetProvider>
+        <AppContent />
+      </HelmetProvider>
     </Provider>
   );
 }
 
 export default App;
-

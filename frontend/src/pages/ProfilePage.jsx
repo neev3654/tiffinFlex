@@ -10,6 +10,7 @@ import { addNotification } from '../store/slices/uiSlice';
 import { profileSchema } from '../utils/validationSchemas';
 import FormInput from '../components/forms/FormInput';
 import FormFileUpload from '../components/forms/FormFileUpload';
+import SEO from '../components/SEO';
 import Navbar from '../components/Navbar';
 import plans from '../data/plans';
 
@@ -346,6 +347,7 @@ const ProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-espresso">
+      <SEO title="Profile" description="Update your dietary preferences and account settings." />
       <Navbar />
       <Formik
         initialValues={{

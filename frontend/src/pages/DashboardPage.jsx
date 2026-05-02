@@ -9,6 +9,7 @@ import weeklyMenu from '../data/weeklyMenu';
 import { MealCardSkeleton, StatSkeleton } from '../components/ui/LoadingSkeletons';
 import EmptyState from '../components/ui/EmptyState';
 import ErrorMessage from '../components/ui/ErrorMessage';
+import SEO from '../components/SEO';
 
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -63,6 +64,7 @@ const DashboardPage = () => {
 
   return (
     <div className="min-h-screen bg-espresso">
+      <SEO title="Dashboard" description="Manage your daily tiffin meals and nutrition." />
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
         {/* Welcome */}

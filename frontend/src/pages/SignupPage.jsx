@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form } from 'formik';
 import { signup, clearError } from '../store/slices/authSlice';
 import { signupSchema } from '../utils/validationSchemas';
+import { trackEvent, ANALYTICS_CATEGORIES, ANALYTICS_ACTIONS } from '../utils/analytics';
 import FormInput from '../components/forms/FormInput';
 import useFormPersistence from '../hooks/useFormPersistence';
+import SEO from '../components/SEO';
 import plans from '../data/plans';
 
 const steps = ['Account', 'Preferences', 'Plan'];
@@ -52,9 +54,11 @@ const SignupContent = ({ step, setStep, loading, error, localError, setLocalErro
 
   return (
     <Form className="bg-cocoa border border-white/5 rounded-2xl p-8">
+      <SEO title="Sign Up" description="Create your TiffinFlex account and start your gourmet meal journey." />
       {(localError || error) && (
         <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-6 text-sm">{localError || error}</div>
       )}
+
 
       <AnimatePresence mode="wait">
         {step === 0 && (
@@ -168,6 +172,7 @@ const SignupPage = () => {
     const resultAction = await dispatch(signup(values));
 
     if (signup.fulfilled.match(resultAction)) {
+      trackEvent(ANALYTICS_CATEGORIES.AUTH, ANALYTICS_ACTIONS.SIGNUP);
       if (resultAction.payload.requiresVerification) {
         sessionStorage.removeItem('signup-form-v1'); // Clear on success
         navigate('/verify-otp', { state: { email: resultAction.payload.email } });

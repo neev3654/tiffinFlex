@@ -45,7 +45,7 @@ const Navbar = () => {
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
-          <Link to="/" className="flex items-center gap-2 group cursor-pointer">
+          <Link to="/" aria-label="TiffinFlex Home" className="flex items-center gap-2 group cursor-pointer">
             <UtensilsCrossed className="w-8 h-8 text-gold group-hover:rotate-12 transition-transform" />
             <span className="text-xl font-serif font-bold tracking-tight italic text-gold">TiffinFlex</span>
           </Link>
@@ -63,7 +63,7 @@ const Navbar = () => {
           <button
             onClick={handleToggleTheme}
             className="w-10 h-10 rounded-full flex items-center justify-center text-warm-grey hover:bg-white/5 hover:text-gold transition-colors hidden md:flex"
-            aria-label="Toggle Theme"
+            aria-label={`Switch to ${darkMode ? 'light' : 'dark'} mode`}
           >
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
@@ -106,7 +106,12 @@ const Navbar = () => {
             >
               {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <button className="text-gold" onClick={() => setIsOpen(!isOpen)}>
+            <button 
+              className="text-gold p-2" 
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+            >
               {isOpen ? <X /> : <Menu />}
             </button>
           </div>

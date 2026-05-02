@@ -6,7 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form } from 'formik';
 import { login, clearError } from '../store/slices/authSlice';
 import { loginSchema } from '../utils/validationSchemas';
+import { trackEvent, ANALYTICS_CATEGORIES, ANALYTICS_ACTIONS } from '../utils/analytics';
 import FormInput from '../components/forms/FormInput';
+import SEO from '../components/SEO';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -42,11 +44,13 @@ const LoginPage = () => {
 
     const resultAction = await dispatch(login(values));
     if (login.fulfilled.match(resultAction)) {
+      trackEvent(ANALYTICS_CATEGORIES.AUTH, ANALYTICS_ACTIONS.LOGIN);
       if (!resultAction.payload.requiresVerification) {
         navigate('/dashboard');
       }
     }
   };
+
 
   const handleGoogleLogin = () => {
     window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
@@ -54,6 +58,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-espresso flex">
+      <SEO title="Login" description="Sign in to your TiffinFlex account to manage your meals." />
       {/* Left — Branding */}
       <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center bg-gradient-to-br from-cocoa to-espresso overflow-hidden">
         <div className="absolute inset-0 opacity-10">
